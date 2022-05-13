@@ -5,9 +5,12 @@ export default function Sidebar(props) {
     const allNotes = props.notes.map(note => (
 
         <section key={note.id}
-                 className={
-                    `title ${note.id === props.currentNoteId ? 'selected-note' : ''}`
-                }
+                 className={`
+                    title ${ note === props.currentNote 
+                        ? 'selected-note' 
+                        : '' }
+                 `}
+                 onClick={(event) => props.selectNote(event, note.id)}
         >
 
             <h4 className="text-snippet">

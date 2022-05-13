@@ -9,19 +9,23 @@ export default function App() {
     const [notes, setNotes] = React.useState([])
     const [currentNoteId, setCurrentNoteId] = React.useState('')
 
-    console.log(notes)
-
-    function createNote() {
-        return {
+    function addNote() {
+        const newNote = {
             content: '# Type your title here',
             id: nanoid()
         }
+        setNotes(prevState => [newNote, ...prevState])
+        setCurrentNoteId(newNote.id)
     }
 
-    function addNote() {
-        const newNote = createNote()
-        setNotes(prevState => [newNote, ...prevState])
-        setCurrentNoteId(notes[0].id)
+    function selectNote(event, id) {
+        event.stopPropagation()
+
+        setCurrentNoteId(id)
+    }
+
+    function findCurrentNote() {
+        return notes.find(note => note.id === currentNoteId)
     }
 
 
@@ -41,6 +45,8 @@ export default function App() {
                             notes={notes}
                             currentNoteId={currentNoteId}
                             addNote={addNote}
+                            currentNote={findCurrentNote()}
+                            selectNote={selectNote}
                         />
 
                         <Editor />
