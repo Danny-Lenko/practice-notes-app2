@@ -10,12 +10,19 @@ export default function Sidebar(props) {
                         ? 'selected-note' 
                         : '' }
                  `}
-                 onClick={(event) => props.selectNote(event, note.id)}
+                 onClick={() => props.selectNote(note.id)}
         >
 
             <h4 className="text-snippet">
-                {note.content}
+                {note.content.match(/[\w\s]/g)}
             </h4>
+
+            <button
+                className="delete-btn"
+                onClick={(event) => props.deleteNote(event, note.id)}
+            >
+                <i className="gg-trash trash-icon"></i>
+            </button>
         </section>
     ))
 

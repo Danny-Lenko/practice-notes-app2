@@ -7,7 +7,13 @@ import { nanoid } from 'nanoid'
 export default function App() {
 
     const [notes, setNotes] = React.useState([])
-    const [currentNoteId, setCurrentNoteId] = React.useState('')
+    const [currentNoteId, setCurrentNoteId] = React.useState(
+        (notes[0] && notes[0].id) || ''
+    )
+
+    React.useEffect(() => {
+
+    }, [notes])
 
     function addNote() {
         const newNote = {
@@ -18,14 +24,29 @@ export default function App() {
         setCurrentNoteId(newNote.id)
     }
 
-    function selectNote(event, id) {
-        event.stopPropagation()
-
+    function selectNote(id) {
         setCurrentNoteId(id)
     }
 
+    function updateNote(text) {
+        // const oldNotes = notes.filter(note => note.id !== currentNoteId)
+        // const newNote = notes.find(note => note.id === currentNoteId)
+        // setNotes([{...newNote, content: text}, ...oldNotes])
+
+        setNotes(prevState => prevState.map(note => (
+            note.id === currentNoteId
+                ? {...note, content: text}
+                : note
+        )))
+    }
+
     function findCurrentNote() {
-        return notes.find(note => note.id === currentNoteId)
+        return notes.find(note => note.id === currentNoteId) || notes[0]
+    }
+
+    function deleteNote(event, id) {
+        event.stopPropagation()
+        setNotes(prevState => prevState.filter(note => note.id !== id))
     }
 
 
@@ -47,10 +68,13 @@ export default function App() {
                             addNote={addNote}
                             currentNote={findCurrentNote()}
                             selectNote={selectNote}
+                            deleteNote={deleteNote}
                         />
 
-                        <Editor />
-
+                        <Editor
+                            currentNote={findCurrentNote()}
+                            updateNote={updateNote}
+                        />
                     </Split>
 
                     : <div className="no-notes">
@@ -63,7 +87,6 @@ export default function App() {
                         >
                             Create one now
                         </button>
-
                     </div>
             }
 
