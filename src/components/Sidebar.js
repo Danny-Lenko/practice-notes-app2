@@ -14,7 +14,7 @@ export default function Sidebar(props) {
         >
 
             <h4 className="text-snippet">
-                {note.content.match(/[\w\s]/g)}
+                {note.content.split('\n')[0].match(/[\w\s]/g)}
             </h4>
 
             <button
