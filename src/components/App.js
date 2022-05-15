@@ -2,97 +2,58 @@ import React from 'react'
 import Sidebar from './Sidebar'
 import Editor from './Editor'
 import Split from "react-split";
-import { nanoid } from 'nanoid'
+import NotesManager from "./NotesManager";
 
 export default function App() {
 
-    const [notes, setNotes] = React.useState(
-        JSON.parse(localStorage.getItem('notes'))
-    )
-    const [currentNoteId, setCurrentNoteId] = React.useState(
-        (notes[0] && notes[0].id) || ''
-    )
-
-    React.useEffect(() => {
-        localStorage.setItem('notes', JSON.stringify(notes))
-    }, [notes])
-
-    function addNote() {
-        const newNote = {
-            content: '# Type your title here',
-            id: nanoid()
-        }
-        setNotes(prevState => [newNote, ...prevState])
-        setCurrentNoteId(newNote.id)
-    }
-
-    function selectNote(id) {
-        setCurrentNoteId(id)
-    }
-
-    function updateNote(text) {
-        // const oldNotes = notes.filter(note => note.id !== currentNoteId)
-        // const newNote = notes.find(note => note.id === currentNoteId)
-        // setNotes([{...newNote, content: text}, ...oldNotes])
-
-        setNotes(prevState => prevState.map(note => (
-            note.id === currentNoteId
-                ? {...note, content: text}
-                : note
-        )))
-    }
-
-    function findCurrentNote() {
-        return notes.find(note => note.id === currentNoteId) || notes[0]
-    }
-
-    function deleteNote(event, id) {
-        event.stopPropagation()
-        setNotes(prevState => prevState.filter(note => note.id !== id))
-    }
-
-
     return(
 
-        <div className="App">
+        <NotesManager render={
+            (params) => (
 
-            {
-                notes[0]
+                <div className="App">
 
-                    ? <Split
-                        className="split"
-                        sizes={[30, 70]}
-                        direction="horizontal"
-                    >
-                        <Sidebar
-                            notes={notes}
-                            currentNoteId={currentNoteId}
-                            addNote={addNote}
-                            currentNote={findCurrentNote()}
-                            selectNote={selectNote}
-                            deleteNote={deleteNote}
-                        />
+                    {
+                        params.notes[0]
 
-                        <Editor
-                            currentNote={findCurrentNote()}
-                            updateNote={updateNote}
-                        />
-                    </Split>
+                            ? <Split
+                                className="split"
+                                sizes={[30, 70]}
+                                direction="horizontal"
+                            >
+                                <Sidebar
+                                    notes={params.notes}
+                                    currentNoteId={params.currentNoteId}
+                                    addNote={params.addNote}
+                                    currentNote={params.findCurrentNote()}
+                                    selectNote={params.selectNote}
+                                    deleteNote={params.deleteNote}
+                                />
 
-                    : <div className="no-notes">
+                                <Editor
+                                    currentNote={params.findCurrentNote()}
+                                    updateNote={params.updateNote}
+                                />
+                            </Split>
 
-                        <h1>You have no notes</h1>
+                            : <div className="no-notes">
 
-                        <button
-                            className="first-note"
-                            onClick={addNote}
-                        >
-                            Create one now
-                        </button>
-                    </div>
-            }
+                                <h1>You have no notes</h1>
 
-        </div>
+                                <button
+                                    className="first-note"
+                                    onClick={params.addNote}
+                                >
+                                    Create one now
+                                </button>
+                            </div>
+                    }
+
+                </div>
+
+            )
+        } />
+
 
     )
 }
