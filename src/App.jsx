@@ -14,7 +14,7 @@ function App() {
             {
                 notes[0]
 
-                ? <Split className="split" sizes={[25, 75]} direction="horizontal">
+                ? <Split className="split" sizes={[30, 70]} direction="horizontal">
                     <Sidebar />
                     <Editor />
                 </Split>
