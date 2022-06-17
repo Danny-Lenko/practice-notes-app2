@@ -45,9 +45,16 @@ function ContextProvider(props) {
       setNotes([selectedNote, ...oldNotes])
    }
 
+   function deleteNote(id, e) {
+      e.stopPropagation()
+      setNotes(prevState => prevState.filter(note => note.id !== id))
+   }
+
    useEffect(() => {
       const currentNote = findSelectedNote()
-      setCurrentNote(currentNote)
+      currentNote 
+         ? setCurrentNote(currentNote)
+         : setCurrentNote(notes[0])
    }, [notes])
 
    return(
@@ -56,7 +63,8 @@ function ContextProvider(props) {
          addNote,
          selectNote,
          currentNote,
-         updateNote
+         updateNote,
+         deleteNote
       }}>
          {props.children}
       </Context.Provider>

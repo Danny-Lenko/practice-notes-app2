@@ -1,35 +1,29 @@
-import React, {useContext} from 'react'
-import {Context} from '../Context'
+import React, { useContext } from "react"
+
+import { Context } from "../Context"
+import OneNote from "./OneNote"
 
 function Sidebar() {
-   const {notes, addNote, selectNote, currentNote} = useContext(Context)
+   const { notes, addNote } = useContext(Context)
 
-   const allNotes = notes.map(note => (
-      <section 
-         className={`title ${note.id === currentNote.id ? 'selected-note' : ''}`} 
-         key={note.id}
-         onClick={() => selectNote(note.id)}
-      >
-         <h5 className="text-snippet">{note.content}</h5>
-         <button className="title--delete">
-            <i className="gg-trash trash-icon"></i>
+   const allNotes = notes.map((note) => (
+      <OneNote note={note} key={note.id} />
+   ));
+
+  return (
+    <aside className="sidebar">
+
+      <header className="sidebar--header">
+         <h3>Notes</h3>
+         <button className="new-note" onClick={addNote}>
+            +
          </button>
-      </section>
-   ))
+      </header>
 
-   return(
-      <aside className="sidebar">
-         <header className="sidebar--header">
-            <h3>Notes</h3>
-            <button 
-               className="new-note"
-               onClick={addNote}
-            >+</button>
-         </header>
+      {allNotes}
 
-         {allNotes}
-      </aside>
-   )
+    </aside>
+  )
 }
 
 export default Sidebar
