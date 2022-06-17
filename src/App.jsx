@@ -7,7 +7,6 @@ import Editor from './components/Editor'
 
 function App() {
     const {notes, addNote} = useContext(Context)
-    console.log(notes)
 
     return(
         <div className="App">

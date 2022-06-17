@@ -3,8 +3,11 @@ import { nanoid } from 'nanoid'
 const Context = React.createContext(null)
 
 function ContextProvider(props) {
-   const [notes, setNotes] = useState([])
-   const [currentNote, setCurrentNote] = useState()
+
+   const [notes, setNotes] = useState(
+      () => JSON.parse(localStorage.getItem('notes')) || []
+   )
+   const [currentNote, setCurrentNote] = useState(notes[0] || '')
 
    function addNote() {
       setNotes(prevState => {
@@ -51,10 +54,13 @@ function ContextProvider(props) {
    }
 
    useEffect(() => {
+      localStorage.setItem('notes', JSON.stringify(notes))
+
       const currentNote = findSelectedNote()
       currentNote 
          ? setCurrentNote(currentNote)
          : setCurrentNote(notes[0])
+
    }, [notes])
 
    return(
