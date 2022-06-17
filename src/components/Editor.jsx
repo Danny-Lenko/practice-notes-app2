@@ -1,9 +1,12 @@
-import React from "react";
+import React, {useContext} from "react";
 import ReactMde from "react-mde";
 import Showdown from "showdown";
+import {Context} from "../Context"
 
-export default function Editor({ currentNote, updateNote }) {
+export default function Editor() {
     const [selectedTab, setSelectedTab] = React.useState("write")
+
+    const {currentNote, updateNote} = useContext(Context)
 
     const converter = new Showdown.Converter({
         tables: true,
